@@ -1,10 +1,12 @@
-const VERSION = "v1";
+const VERSION = "v2";
 
 // Vercel injects these at build time on every deploy.
 // Read on the server so no NEXT_PUBLIC_ prefix is required.
 const commitSha = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "local";
 const commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE ?? "desarrollo local";
-const region = process.env.VERCEL_REGION ?? "—";
+// VERCEL_REGION only exists at request time inside a serverless function.
+// This page is prerendered at build time, so read the build-time env instead.
+const environment = process.env.VERCEL_ENV ?? "development";
 
 export default function Home() {
   return (
@@ -27,7 +29,7 @@ export default function Home() {
         <dl className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-zinc-200 bg-zinc-200 sm:grid-cols-3 dark:border-zinc-800 dark:bg-zinc-800">
           <Metric label="Versión" value={VERSION} />
           <Metric label="Commit" value={commitSha} />
-          <Metric label="Región" value={region} />
+          <Metric label="Entorno" value={environment} />
         </dl>
 
         <p className="mt-4 font-mono text-xs text-zinc-500 dark:text-zinc-500">

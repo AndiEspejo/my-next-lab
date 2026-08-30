@@ -9,7 +9,7 @@
 
 | Ítem | Valor |
 | --- | --- |
-| URL pública | `https://<PENDIENTE>.vercel.app` |
+| URL pública | https://my-next-lab-eta.vercel.app/ |
 | Repositorio | https://github.com/AndiEspejo/my-next-lab |
 | Captura del home | `docs/home.png` |
 | Framework | Next.js 16 (App Router, TypeScript, Tailwind CSS 4) |
@@ -81,7 +81,7 @@ Escenarios con costo, para dimensionar:
 
 **Evidencia del despliegue continuo.** La página muestra en pantalla el hash del
 commit desplegado, leído de las variables de entorno que Vercel inyecta en cada
-build (`VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_MESSAGE`, `VERCEL_REGION`).
+build (`VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_MESSAGE`, `VERCEL_ENV`).
 Al comparar el hash visible antes y después del segundo commit se demuestra que
 el despliegue se disparó solo, sin intervención manual.
 
