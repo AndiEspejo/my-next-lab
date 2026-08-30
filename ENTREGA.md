@@ -74,16 +74,39 @@ Escenarios con costo, para dimensionar:
 
 ## 3. Checklist de validación
 
-- [ ] El sitio carga en el navegador y en modo incógnito.
-- [ ] Un nuevo commit en `main` produce un cambio visible en la URL de producción.
-- [ ] HTTPS activo (automático en el dominio `*.vercel.app`).
-- [ ] (Opcional) Dominio personalizado configurado.
+- [x] El sitio carga en el navegador y en modo incógnito.
+- [x] Un nuevo commit en `main` produce un cambio visible en la URL de producción.
+- [x] HTTPS activo (automático en el dominio `*.vercel.app`).
+- [ ] (Opcional) Dominio personalizado configurado. — no se realizó.
 
-**Evidencia del despliegue continuo.** La página muestra en pantalla el hash del
-commit desplegado, leído de las variables de entorno que Vercel inyecta en cada
-build (`VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_MESSAGE`, `VERCEL_ENV`).
-Al comparar el hash visible antes y después del segundo commit se demuestra que
-el despliegue se disparó solo, sin intervención manual.
+### Evidencia del despliegue continuo
+
+La página muestra en pantalla el hash del commit desplegado, leído de las
+variables de entorno que Vercel inyecta en cada build
+(`VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_MESSAGE`, `VERCEL_ENV`). Comparando
+el valor visible antes y después de un push se prueba que el despliegue se
+disparó solo, sin intervención manual:
+
+| Momento | Commit visible en producción | Versión |
+| --- | --- | --- |
+| Después del primer deploy | `5ce75bd` | v1 |
+| ~16 s después de `git push` del segundo commit | `016bf74` | v2 |
+
+El único acto humano entre ambos estados fue `git push`. No hubo build manual,
+ni subida de archivos, ni reinicio de servidor.
+
+**Nota sobre la captura.** `docs/home.png` congela el estado del commit
+`016bf74`. Como cada push a `main` vuelve a desplegar, la URL en vivo mostrará el
+hash del último commit del repositorio, que puede ser posterior al de la imagen.
+Esa diferencia no es un error: es precisamente el comportamiento que el
+laboratorio pide demostrar.
+
+### Verificación de HTTPS
+
+```
+$ curl -s -o /dev/null -w "%{http_code} %{scheme}\n" https://my-next-lab-eta.vercel.app/
+200 HTTPS
+```
 
 ---
 
