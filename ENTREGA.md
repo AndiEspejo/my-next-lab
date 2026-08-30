@@ -1,245 +1,105 @@
-# Laboratorio 1 — Cloud Computing (UdeA, 2026)
+# Laboratorio 1 - Cloud Computing
 
-**Estudiante:** Andi Espejo
-**Opción elegida:** Next.js en Vercel (Jamstack / desarrolladores)
+Jefferson Andres Espejo Goez
+UdeA, 2026
 
----
+Opción elegida: Next.js en Vercel.
 
-## 1. Entregables
+## Entregables
 
-| Ítem | Valor |
-| --- | --- |
-| URL pública | https://my-next-lab-eta.vercel.app/ |
-| Repositorio | https://github.com/AndiEspejo/my-next-lab |
-| Captura del home | `docs/home.png` |
-| Framework | Next.js 16 (App Router, TypeScript, Tailwind CSS 4) |
+URL pública: https://my-next-lab-eta.vercel.app/
 
----
+Repositorio: https://github.com/AndiEspejo/my-next-lab
 
-## 2. Nota breve: proveedor, razones y costos
+Captura del home: `docs/home.png`
 
-### Proveedor elegido
+El proyecto es una app de Next.js 16 con App Router, TypeScript y Tailwind, creada con `create-next-app` y conectada a Vercel desde GitHub.
 
-**Vercel**, sobre un repositorio alojado en GitHub.
+## Proveedor, razones y costos
 
-### Razones
+Elegí Vercel porque es la plataforma que mantiene Next.js, así que el build lo detecta solo y no tuve que escribir configuración de infraestructura. Conecté el repositorio y en el primer intento ya tenía la URL funcionando con HTTPS.
 
-1. **Integración nativa con Next.js.** Vercel mantiene el framework, así que el
-   build se detecta solo: no hay que escribir `Dockerfile`, ni pipeline de CI, ni
-   configurar un servidor web. El tiempo se invierte en la aplicación, no en la
-   infraestructura.
-2. **Despliegue continuo desde Git.** Cada push a `main` dispara un build y un
-   despliegue a producción; cada rama o pull request genera un *preview
-   deployment* con URL propia. Esto cubre directamente el ítem del checklist
-   "hay un cambio visible tras un nuevo commit".
-3. **HTTPS y CDN global sin configuración.** El certificado TLS del dominio
-   `*.vercel.app` se emite y renueva automáticamente, y los archivos estáticos se
-   sirven desde una red de distribución global.
-4. **Costo cero y sin tarjeta para el alcance del laboratorio.** A diferencia de
-   AWS Lightsail, que factura desde la primera hora de instancia encendida, aquí
-   no hay recursos que apagar ni riesgo de cargos por olvido.
-5. **Reversibilidad.** Al ser una aplicación Next.js estándar en un repositorio
-   propio, migrar a AWS Amplify, Azure Static Web Apps o a un contenedor propio
-   implica cambiar el destino del deploy, no reescribir la aplicación.
+La segunda razón fue el despliegue automático. Cada push a `main` dispara un build nuevo, que es justo lo que pide el checklist del laboratorio. No tuve que montar un pipeline aparte.
 
-### Costos estimados
+También pesó el costo. El plan Hobby es gratis para uso personal, no pide tarjeta y no deja recursos encendidos que se me olviden apagar. La otra opción del laboratorio, WordPress en Lightsail, cobra desde la primera hora de instancia aunque nadie visite el sitio.
 
-| Concepto | Costo en este laboratorio |
-| --- | --- |
-| Plan Vercel Hobby | **USD 0 / mes** |
-| Dominio `*.vercel.app` | Incluido, USD 0 |
-| Certificado TLS | Incluido, USD 0 |
-| Repositorio público en GitHub | USD 0 |
-| **Total** | **USD 0** |
+Costos de este laboratorio: cero. El plan Hobby, el subdominio `.vercel.app`, el certificado TLS y el repositorio público en GitHub no tienen costo.
 
-El plan Hobby es gratuito para uso personal y no comercial, e incluye cuotas
-mensuales de ancho de banda, invocaciones de funciones y minutos de build más que
-suficientes para un sitio de una página. Los excedentes no se facturan de forma
-automática: el proyecto se pausa o se solicita una ampliación.
+Si el proyecto creciera, los costos serían estos. El plan Pro cuesta alrededor de 20 dólares por usuario al mes y aplica si el uso deja de ser personal. Un dominio propio cuesta entre 10 y 15 dólares al año en el registrador, aunque Vercel no cobra por conectarlo. Para comparar, la instancia más básica de Lightsail cuesta unos 5 dólares al mes. Estas cifras son las publicadas al momento de la entrega y conviene revisarlas en vercel.com/pricing.
 
-Escenarios con costo, para dimensionar:
+## Validación
 
-- **Uso comercial o equipo:** plan Pro, aproximadamente **USD 20 por usuario al
-  mes**, más consumo por encima de las cuotas incluidas.
-- **Dominio propio:** entre **USD 10 y 15 al año** en el registrador (Namecheap,
-  Route 53, GoDaddy). Vercel no cobra por conectarlo.
-- **Comparación con la opción Lightsail** del mismo laboratorio: la instancia más
-  básica cuesta del orden de **USD 5 al mes**, se cobre o no tráfico, mientras la
-  instancia siga encendida.
+- [x] El sitio carga en el navegador y en modo incógnito
+- [x] Un commit nuevo en `main` produce un cambio visible en producción
+- [x] HTTPS activo
+- [ ] Dominio personalizado (opcional, no lo hice)
 
-> Las cifras corresponden a los planes publicados al momento de la entrega y
-> conviene verificarlas en https://vercel.com/pricing antes de citarlas.
+Para poder demostrar el segundo punto puse en la página el hash del commit que Vercel desplegó. Lo leo de las variables que Vercel inyecta en cada build: `VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_MESSAGE` y `VERCEL_ENV`.
 
----
+Después del primer deploy la página mostraba el commit `5ce75bd` con la versión v1. Hice un push del segundo commit y unos 16 segundos después la misma URL ya mostraba `016bf74` con la versión v2. Lo único que hice entre un estado y el otro fue `git push`.
 
-## 3. Checklist de validación
+La captura en `docs/home.png` corresponde al commit `016bf74`. Como cada push vuelve a desplegar, la URL en vivo puede mostrar un hash posterior al de la imagen.
 
-- [x] El sitio carga en el navegador y en modo incógnito.
-- [x] Un nuevo commit en `main` produce un cambio visible en la URL de producción.
-- [x] HTTPS activo (automático en el dominio `*.vercel.app`).
-- [ ] (Opcional) Dominio personalizado configurado. — no se realizó.
-
-### Evidencia del despliegue continuo
-
-La página muestra en pantalla el hash del commit desplegado, leído de las
-variables de entorno que Vercel inyecta en cada build
-(`VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_MESSAGE`, `VERCEL_ENV`). Comparando
-el valor visible antes y después de un push se prueba que el despliegue se
-disparó solo, sin intervención manual:
-
-| Momento | Commit visible en producción | Versión |
-| --- | --- | --- |
-| Después del primer deploy | `5ce75bd` | v1 |
-| ~16 s después de `git push` del segundo commit | `016bf74` | v2 |
-
-El único acto humano entre ambos estados fue `git push`. No hubo build manual,
-ni subida de archivos, ni reinicio de servidor.
-
-**Nota sobre la captura.** `docs/home.png` congela el estado del commit
-`016bf74`. Como cada push a `main` vuelve a desplegar, la URL en vivo mostrará el
-hash del último commit del repositorio, que puede ser posterior al de la imagen.
-Esa diferencia no es un error: es precisamente el comportamiento que el
-laboratorio pide demostrar.
-
-### Verificación de HTTPS
+Para verificar el HTTPS:
 
 ```
 $ curl -s -o /dev/null -w "%{http_code} %{scheme}\n" https://my-next-lab-eta.vercel.app/
 200 HTTPS
 ```
 
----
+## Preguntas de reflexión
 
-## 4. Preguntas de reflexión
+### 1. ¿Qué modelo de servicio usaste?
 
-### 4.1 ¿Qué modelo de servicio usaste?
+PaaS, y por debajo funciona con un modelo serverless.
 
-**PaaS, con un modelo de ejecución serverless por debajo.**
+No administro sistema operativo, ni servidor web, ni parches, así que no es IaaS. Tampoco estoy usando un software terminado de un tercero, así que no es SaaS. Yo entrego el código y la plataforma se encarga de compilarlo y publicarlo, que es lo que define a PaaS.
 
-El límite es claro: no administro sistema operativo, ni servidor web, ni
-parches, ni balanceadores — eso descarta IaaS. Tampoco consumo software
-terminado de un tercero — eso descarta SaaS. Entrego código fuente y la
-plataforma se encarga de compilarlo, distribuirlo y ejecutarlo: eso es PaaS.
+Vale la pena aclarar cómo se ejecuta. Las páginas que se prerenderizan durante el build quedan como archivos estáticos y se sirven desde el CDN, sin que haya un servidor involucrado en cada visita. Las partes dinámicas se empaquetan como funciones serverless que se levantan cuando llega una petición y se apagan al terminar. No hay un proceso encendido esperando tráfico, y por eso el costo base es cero: se paga por uso y no por capacidad reservada. Lightsail es lo contrario, ahí se paga por hora de instancia encendida.
 
-La precisión importante es *cómo* se ejecuta. En este proyecto conviven dos
-modos:
+### 2. ¿Qué ventajas y limitaciones viste?
 
-- Las páginas prerenderizadas en tiempo de build se sirven como archivos
-  estáticos desde el CDN. No hay servidor involucrado en cada visita.
-- Las funciones de servidor (Route Handlers, Server Actions, renderizado
-  dinámico) se empaquetan como **funciones serverless**: se instancian cuando
-  llega una petición y se apagan al terminar. No existe un proceso encendido
-  esperando tráfico.
+Lo que más me sirvió fue lo rápido que se llega a producción. De crear el proyecto a tener una URL con HTTPS pasaron minutos y no escribí nada de configuración. También está bueno que cada rama genere su propio preview con URL aparte, y que se pueda volver a un deploy anterior sin reconstruir nada porque cada build queda guardado.
 
-De ahí que el costo base sea cero: no se paga por capacidad reservada, se paga
-por uso. Es exactamente lo contrario del modelo de la opción Lightsail del mismo
-laboratorio, que es IaaS y factura por hora de instancia encendida,
-independientemente de si alguien visita el sitio.
+Las limitaciones también se notan. Hay bastante acoplamiento al proveedor: cosas como ISR, el middleware en el edge o la optimización de imágenes son implementaciones de Vercel, y aunque el código sigue siendo Next.js estándar, reproducir ese comportamiento en otro lado da trabajo.
 
-### 4.2 ¿Qué ventajas y limitaciones viste en ese proveedor?
+No hay acceso al sistema operativo ni forma de ajustar la infraestructura, lo cual es cómodo hasta que se necesita algo que la plataforma no expone. Y el modelo serverless tiene límites propios: hay tope de duración por invocación, así que no sirve para procesos largos ni para conexiones persistentes. Las funciones sin tráfico reciente además tienen arranque en frío y la primera petición sale más lenta.
 
-**Ventajas**
+Otra cosa que hay que tener presente es que Vercel no da base de datos ni almacenamiento persistente, eso se contrata y se paga aparte. Y el plan gratuito es solo para uso personal, cualquier uso comercial obliga a pagar.
 
-- **Tiempo hasta producción medido en minutos.** Del `create-next-app` a una URL
-  pública con HTTPS sin escribir configuración de infraestructura.
-- **Preview deployments por rama.** Cada pull request obtiene un entorno
-  desechable con URL propia; se revisa el cambio funcionando, no el diff.
-- **Rollback inmediato.** Cada despliegue es inmutable y queda en el historial;
-  volver a una versión anterior es promover un build existente, no reconstruir.
-- **HTTPS, CDN y optimización de imágenes por defecto**, sin configuración.
-- **Variables de entorno por ambiente** (Production, Preview, Development) desde
-  la interfaz, sin secretos en el repositorio.
+Me pasó un caso concreto que ilustra el punto de las limitaciones. Al principio quería mostrar la región desde donde se sirve la página usando `VERCEL_REGION`, pero siempre salía vacío. La razón es que esa variable solo existe en tiempo de ejecución dentro de una función, y mi página se prerenderiza durante el build, cuando todavía no hay ninguna petición. Terminé usando `VERCEL_ENV`, que sí está disponible en el build.
 
-**Limitaciones**
+### 3. ¿Cómo escalarías la app si crece el tráfico?
 
-- **Acoplamiento al proveedor.** Las capacidades más cómodas (ISR, middleware en
-  el edge, optimización de imágenes, analítica) son implementaciones de Vercel.
-  El código sigue siendo Next.js estándar, pero reproducir ese comportamiento
-  fuera de Vercel exige trabajo adicional.
-- **Poco control sobre la infraestructura.** No hay acceso al sistema operativo,
-  ni elección de instancia, ni ajuste fino de red. Eso es una ventaja hasta que
-  se necesita algo que la plataforma no expone.
-- **Restricciones del modelo serverless.** Hay límite de duración por invocación
-  y de tamaño del bundle de la función. No es un lugar para procesos largos,
-  trabajos por lotes ni conexiones persistentes tipo WebSocket de larga vida.
-- **Arranques en frío.** Una función sin tráfico reciente agrega latencia en la
-  primera petición.
-- **Sin estado propio.** Vercel no aporta base de datos ni sistema de archivos
-  persistente en el runtime de la función: la persistencia se contrata aparte y
-  se paga aparte.
-- **El plan gratuito es para uso personal y no comercial.** Cualquier uso
-  productivo real obliga a pasar a un plan pago.
+El cómputo ya escala solo: el CDN absorbe lo estático y las funciones se instancian en paralelo según la demanda. El trabajo real está en lo que viene detrás.
 
-### 4.3 ¿Cómo escalarías tu app si crece el tráfico?
+Lo primero sería cachear todo lo posible, prerenderizando lo que no sea específico de cada usuario y usando ISR con revalidación en vez de renderizado dinámico. Cada respuesta que sale de la caché es una función que no se ejecuta, así que baja la latencia y baja el costo al mismo tiempo.
 
-El escalamiento horizontal del cómputo ya viene resuelto: el CDN absorbe el
-contenido estático y las funciones serverless se instancian en paralelo según la
-demanda. El trabajo real está en no romper lo que hay detrás.
+Lo segundo es proteger la base de datos, que es el cuello de botella real. Si mil funciones se ejecutan al tiempo, cada una intenta abrir su conexión y el pool se agota. La solución es un pooler tipo PgBouncer o un driver serverless que hable por HTTP.
 
-Por orden de impacto:
+Después sacaría de la petición todo lo que no necesita responderle al usuario, como envíos de correo o procesamiento de imágenes, y lo movería a una cola. También agregaría una caché de datos como Redis para las consultas repetidas y costosas, y pondría rate limiting para que un pico raro no se convierta en gasto.
 
-1. **Mover trabajo hacia la caché.** Prerenderizar todo lo que no sea específico
-   del usuario y usar ISR con `revalidate` en lugar de renderizado dinámico. Cada
-   respuesta servida desde caché es una invocación de función que no ocurre: baja
-   la latencia y baja la factura al mismo tiempo.
-2. **Proteger la base de datos.** Este es el cuello de botella real. Mil
-   funciones concurrentes intentan abrir mil conexiones y agotan el pool antes de
-   que la plataforma se inmute. La solución es un *pooler* (PgBouncer, Prisma
-   Accelerate, Neon o Supabase con pooling) o un driver serverless sobre HTTP.
-3. **Sacar de la ruta crítica lo que no debe responder al usuario.** Envíos de
-   correo, procesamiento de imágenes, webhooks: a una cola o a un job programado,
-   no dentro de la petición.
-4. **Añadir capas de caché de datos.** Redis administrado (Upstash) para
-   respuestas costosas y consultas repetidas.
-5. **Poner límites.** Rate limiting por IP o por usuario y protección contra bots,
-   para que un pico anómalo no se traduzca en gasto.
-6. **Medir antes de decidir.** Métricas de Core Web Vitals, tasa de aciertos de
-   caché, duración de funciones y latencia de base de datos. Escalar sin datos es
-   adivinar.
+Sobre todo, mediría antes de decidir. Sin métricas de caché, latencia y duración de funciones, escalar es adivinar.
 
-Si la aplicación deja de encajar en el modelo serverless — procesos largos,
-cargas de trabajo sostenidas, requisitos de residencia de datos — la migración
-natural es a contenedores (AWS ECS/Fargate, Cloud Run) manteniendo el CDN al
-frente.
+Si en algún momento la app deja de encajar en el modelo serverless, por ejemplo por procesos largos o carga sostenida, la migración natural sería a contenedores en algo como Cloud Run o ECS, dejando el CDN adelante.
 
-### 4.4 ¿Qué harías para estimar y controlar costos?
+### 4. ¿Qué harías para estimar y controlar costos?
 
-**Estimar, antes de desplegar**
+Para estimar, primero hay que entender qué cobra el proveedor. En Vercel no se paga por servidor sino por ancho de banda, invocaciones y duración de funciones, minutos de build y transformaciones de imagen. Con eso claro se puede proyectar: visitas al mes por peso de la página da el ancho de banda, y peticiones dinámicas por duración promedio da el cómputo. A eso hay que sumarle lo que no viene incluido, como la base de datos y el dominio.
 
-- Identificar las unidades que el proveedor factura. En Vercel: ancho de banda,
-  invocaciones y duración de funciones, minutos de build, transformaciones de
-  imagen. Ese es el modelo mental correcto, no "cuánto cuesta el servidor".
-- Proyectar volumen: visitas mensuales × peso de la página = ancho de banda;
-  peticiones dinámicas × duración media = cómputo.
-- Calcular sobre la calculadora oficial del proveedor y sumar aparte lo que no
-  incluye: base de datos, dominio, servicios de terceros.
+Para controlar, lo primero que configuraría es una alerta de gasto. Vercel tiene Spend Management, que avisa y puede pausar el proyecto al llegar a un límite; en AWS el equivalente es AWS Budgets. Eso se configura el primer día, no el día de la factura sorpresa.
 
-**Controlar, una vez en producción**
+Después, cachear agresivamente, que es la palanca de mayor efecto porque baja latencia, invocaciones y ancho de banda al mismo tiempo. Revisaría el consumo cada semana mirando la tendencia y no solo el total, y separaría ambientes para saber si el gasto viene de producción o de los previews.
 
-- **Alertas de consumo y límites de gasto.** Vercel ofrece *Spend Management* con
-  notificación y pausa automática al alcanzar un umbral. En AWS, el equivalente
-  es AWS Budgets con alarma en CloudWatch. Configurarlo el primer día, no el día
-  de la factura sorpresa.
-- **Cachear agresivamente.** Es la palanca de mayor efecto: reduce
-  simultáneamente latencia, invocaciones y ancho de banda.
-- **Revisar el consumo cada semana** en el panel de uso, buscando la tendencia y
-  no solo el total.
-- **Etiquetar y separar ambientes** para saber si el gasto viene de producción o
-  de previews.
-- **Apagar lo que no se usa.** Ramas viejas con previews activos, proyectos
-  abandonados, recursos de prueba. En este laboratorio, eso significa borrar el
-  proyecto al terminar si no se seguirá usando.
-- **Presupuestar el peor caso, no el promedio.** Un pico de tráfico o un bucle
-  accidental en una función se paga igual. Un límite duro de gasto es más barato
-  que un incidente.
+También hay que apagar lo que no se usa: ramas viejas con previews activos, proyectos abandonados, recursos de prueba. En este laboratorio eso significa borrar el proyecto cuando termine.
 
----
+Por último, presupuestaría pensando en el peor caso y no en el promedio. Un pico de tráfico o un bucle accidental en una función se paga igual, y un límite duro de gasto sale más barato que un incidente.
 
-## 5. Limpieza
+## Limpieza
 
-Si el proyecto no se seguirá usando:
+Si no sigo usando el proyecto:
 
-1. Vercel → Project → Settings → Delete Project.
-2. GitHub → Settings → Delete this repository (opcional).
+1. Vercel, en Project > Settings > Delete Project
+2. GitHub, borrar el repositorio (opcional)
 
-No quedan recursos facturables activos: el plan Hobby no reserva capacidad.
+No quedan recursos facturables activos porque el plan Hobby no reserva capacidad.
